@@ -11,11 +11,11 @@ namespace SchedAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ActivitiesController : ControllerBase
+    public class ActivityController : ControllerBase
     {
         private readonly AppDBContext _context;
 
-        public ActivitiesController(AppDBContext context)
+        public ActivityController(AppDBContext context)
         {
             _context = context;
         }
@@ -23,12 +23,12 @@ namespace SchedAppAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Activities == null)
+            if (id == null || _context.Activity == null)
             {
                 return NotFound();
             }
 
-            var activity = await _context.Activities
+            var activity = await _context.Activity
                 .FirstOrDefaultAsync(m => m.id == id);
             if (activity == null)
             {

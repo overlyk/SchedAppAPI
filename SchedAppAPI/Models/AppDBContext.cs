@@ -17,19 +17,24 @@ public partial class AppDBContext : DbContext
     {
     }
 
-    public virtual DbSet<Activity> Activities { get; set; }
+    public virtual DbSet<Activity> Activity { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Game> Game { get; set; }
+
+    public virtual DbSet<Goal> Goal { get; set; }
+
+    public virtual DbSet<Team> Team { get; set; }
+
+    public virtual DbSet<User> User { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=schedapp.database.windows.net;Initial Catalog=AppDB;User ID=sadmin;Password=!T2y3g4h");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Activity>(entity =>
         {
-            entity.ToTable("Activity");
-
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
@@ -37,10 +42,37 @@ public partial class AppDBContext : DbContext
             entity.Property(e => e.StartTime).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<Game>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.EndTime).HasColumnType("datetime");
+            entity.Property(e => e.Location).HasMaxLength(50);
+            entity.Property(e => e.Sport).HasMaxLength(50);
+            entity.Property(e => e.StartTime).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Goal>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Team>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.CoachId)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Sport).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
-            entity.ToTable("User");
-
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);

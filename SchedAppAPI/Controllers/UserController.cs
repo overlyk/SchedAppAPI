@@ -11,11 +11,11 @@ namespace SchedAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly AppDBContext _context;
 
-        public UsersController(AppDBContext context)
+        public UserController(AppDBContext context)
         {
             _context = context;
         }
@@ -23,12 +23,12 @@ namespace SchedAppAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
+            var user = await _context.User
                 .FirstOrDefaultAsync(m => m.id == id);
             if (user == null)
             {
@@ -38,35 +38,44 @@ namespace SchedAppAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Users()
+        [HttpGet("/login")]
+        public async Task<IActionResult> LoginUesr(string username, string password)
         {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
+            var user = await _context.User.Where(x => x.Name == username && x.Password == password).ToListAsync();
 
-            var user = await _context.Users.FirstOrDefaultAsync();
             if (user == null)
             {
                 return NotFound();
             }
+            else
+            {
+                return Ok(user);
+            }
+        }
 
-            return Ok(user);
+        [HttpGet]
+        public async Task<IActionResult> Users()
+        {
+            if (_context.User == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _context.User.ToListAsync();
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(users);
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] User user)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            _context.Add(user);
+            await _context.SaveChangesAsync();
             return Ok(user);
         }
 
