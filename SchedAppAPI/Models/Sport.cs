@@ -5,15 +5,9 @@ using System.Collections.Generic;
 
 namespace SchedAppAPI.Models;
 
-public partial class Game
+public partial class Sport
 {
     public int id { get; set; }
 
-    public int hometeamid { get; set; }
-
-    public int awayteamid { get; set; }
-
-    public DateTime? starttime { get; set; }
-
-    public DateTime? endtime { get; set; }
+    public string name { get; set; }
 }

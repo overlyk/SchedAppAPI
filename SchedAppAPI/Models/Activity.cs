@@ -9,11 +9,17 @@ public partial class Activity
 {
     public int id { get; set; }
 
-    public string Name { get; set; }
+    public string name { get; set; }
 
-    public DateTime? StartTime { get; set; }
+    public string description { get; set; }
 
-    public DateTime? EndTime { get; set; }
+    public DateTime? starttime { get; set; }
 
-    public int UserID { get; set; }
+    public DateTime? endtime { get; set; }
+
+    public int userid { get; set; }
+
+    public int? teamid { get; set; }
+
+    public string location { get; set; }
 }

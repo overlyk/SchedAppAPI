@@ -38,18 +38,20 @@ namespace SchedAppAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet("/login")]
-        public async Task<IActionResult> LoginUesr(string username, string password)
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody]User user)
         {
-            var user = await _context.User.Where(x => x.Name == username && x.Password == password).ToListAsync();
 
-            if (user == null)
+            var dbuser = await _context.User.Where(x => x.username == user.username && x.password == user.password).FirstOrDefaultAsync();
+
+            if (dbuser != null)
             {
-                return NotFound();
+                return Ok(dbuser);
+                
             }
             else
             {
-                return Ok(user);
+                return NotFound();
             }
         }
 
@@ -70,9 +72,8 @@ namespace SchedAppAPI.Controllers
             return Ok(users);
         }
 
-        // POST: Users/Create
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] User user)
+        [HttpPost("test")]
+        public async Task<IActionResult> Create([FromBody]User user)
         {
             _context.Add(user);
             await _context.SaveChangesAsync();

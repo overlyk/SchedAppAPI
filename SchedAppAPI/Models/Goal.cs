@@ -7,13 +7,15 @@ namespace SchedAppAPI.Models;
 
 public partial class Goal
 {
-    public int Id { get; set; }
+    public int id { get; set; }
 
-    public string Name { get; set; }
+    public int userid { get; set; }
 
-    public int? UserId { get; set; }
+    public int? teamid { get; set; }
+
+    public string description { get; set; }
+
+    public string name { get; set; }
 
     public bool isCompleted { get; set; }
-
-    public int? TeamId { get; set; }
 }

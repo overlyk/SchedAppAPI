@@ -7,9 +7,11 @@ namespace SchedAppAPI.Models;
 
 public partial class Team
 {
-    public int Id { get; set; }
+    public int id { get; set; }
 
-    public string Sport { get; set; }
+    public int coachid { get; set; }
 
-    public string CoachId { get; set; }
+    public int sportid { get; set; }
+
+    public string name { get; set; }
 }

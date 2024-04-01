@@ -23,6 +23,8 @@ public partial class AppDBContext : DbContext
 
     public virtual DbSet<Goal> Goal { get; set; }
 
+    public virtual DbSet<Sport> Sport { get; set; }
+
     public virtual DbSet<Team> Team { get; set; }
 
     public virtual DbSet<User> User { get; set; }
@@ -35,49 +37,58 @@ public partial class AppDBContext : DbContext
     {
         modelBuilder.Entity<Activity>(entity =>
         {
-            entity.Property(e => e.EndTime).HasColumnType("datetime");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.StartTime).HasColumnType("datetime");
+            entity.Property(e => e.description).HasMaxLength(100);
+            entity.Property(e => e.endtime).HasColumnType("datetime");
+            entity.Property(e => e.location).HasMaxLength(50);
+            entity.Property(e => e.name)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.starttime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Game>(entity =>
         {
-            entity.HasNoKey();
-
-            entity.Property(e => e.EndTime).HasColumnType("datetime");
-            entity.Property(e => e.Location).HasMaxLength(50);
-            entity.Property(e => e.Sport).HasMaxLength(50);
-            entity.Property(e => e.StartTime).HasColumnType("datetime");
+            entity.Property(e => e.endtime).HasColumnType("datetime");
+            entity.Property(e => e.starttime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Goal>(entity =>
         {
-            entity.HasNoKey();
+            entity.Property(e => e.description).HasMaxLength(100);
+            entity.Property(e => e.name)
+                .IsRequired()
+                .HasMaxLength(50);
+        });
 
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.Name).HasMaxLength(50);
+        modelBuilder.Entity<Sport>(entity =>
+        {
+            entity.Property(e => e.name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Team>(entity =>
         {
-            entity.HasNoKey();
-
-            entity.Property(e => e.CoachId)
+            entity.Property(e => e.name)
                 .IsRequired()
                 .HasMaxLength(50);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.Sport).HasMaxLength(50);
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.Property(e => e.Name)
+            entity.Property(e => e.firstname)
+                .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Password)
-                .HasMaxLength(10)
+            entity.Property(e => e.lastname)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.password)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.username)
+                .IsRequired()
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
