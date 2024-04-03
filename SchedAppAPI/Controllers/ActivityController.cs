@@ -38,18 +38,30 @@ namespace SchedAppAPI.Controllers
             return Ok(activity);
         }
 
-        // POST: Activities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("activity")]
-        public async Task<IActionResult> Create([Bind("id,Name,StartTime,EndTime,UserID")] Activity activity)
+        //get all activities in db
+        [HttpGet]
+        public async Task<IActionResult> Activities()
         {
-            if (ModelState.IsValid)
+            if (_context.Activity == null)
             {
-                _context.Add(activity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
+
+            var activities = await _context.Activity.ToListAsync();
+            if (activities == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(activities);
+        }
+
+        //create a new activity
+        [HttpPost("activity")]
+        public async Task<IActionResult> Create([FromBody] Activity activity)
+        {
+            _context.Add(activity);
+            await _context.SaveChangesAsync();
             return Ok(activity);
         }
 

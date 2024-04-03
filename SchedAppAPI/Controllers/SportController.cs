@@ -11,59 +11,59 @@ namespace SchedAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GoalController : ControllerBase
+    public class SportController : ControllerBase
     {
         private readonly AppDBContext _context;
 
-        public GoalController(AppDBContext context)
+        public SportController(AppDBContext context)
         {
             _context = context;
         }
 
-        //get single goal based on goal id
+        //get a sport based on sport id
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Goal == null)
+            if (id == null || _context.Sport == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goal
+            var sport = await _context.Sport
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (goal == null)
+            if (sport == null)
             {
                 return NotFound();
             }
 
-            return Ok(goal);
+            return Ok(sport);
         }
 
-        //get all goals
+        //get all sports
         [HttpGet]
-        public async Task<IActionResult> Goals()
+        public async Task<IActionResult> Sports()
         {
-            if (_context.Goal == null)
+            if (_context.Sport == null)
             {
                 return NotFound();
             }
 
-            var goals = await _context.Goal.ToListAsync();
-            if (goals == null)
+            var sports = await _context.Sport.ToListAsync();
+            if (sports == null)
             {
                 return NotFound();
             }
 
-            return Ok(goals);
+            return Ok(sports);
         }
 
-        //create a goal
-        [HttpPost("goal")]
-        public async Task<IActionResult> Create([FromBody] Goal goal)
+        //create a new sport
+        [HttpPost("sport")]
+        public async Task<IActionResult> Create([FromBody] Sport sport)
         {
-            _context.Add(goal);
+            _context.Add(sport);
             await _context.SaveChangesAsync();
-            return Ok(goal);
+            return Ok(sport);
         }
 
         //// POST: Users/Edit/5

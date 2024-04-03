@@ -20,6 +20,7 @@ namespace SchedAppAPI.Controllers
             _context = context;
         }
 
+        //get single user based on user id
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int? id)
         {
@@ -38,6 +39,7 @@ namespace SchedAppAPI.Controllers
             return Ok(user);
         }
 
+        //login user
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody]User user)
         {
@@ -55,6 +57,7 @@ namespace SchedAppAPI.Controllers
             }
         }
 
+        //get all users in db
         [HttpGet]
         public async Task<IActionResult> Users()
         {
@@ -72,7 +75,8 @@ namespace SchedAppAPI.Controllers
             return Ok(users);
         }
 
-        [HttpPost("test")]
+        //create new user
+        [HttpPost("user")]
         public async Task<IActionResult> Create([FromBody]User user)
         {
             _context.Add(user);
