@@ -101,28 +101,86 @@ namespace SchedAppAPI.Controllers
         //    return Ok(user);
         //}
 
-        //// POST: Users/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Users == null)
-        //    {
-        //        return Problem("Entity set 'AppDBContext.Users'  is null.");
-        //    }
-        //    var user = await _context.Users.FindAsync(id);
-        //    if (user != null)
-        //    {
-        //        _context.Users.Remove(user);
-        //    }
 
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        [HttpPut("{goalId}")]
+        public async Task<IActionResult> putGoal(int goalId,  Goal goal)
+        {
+            if (goalId != goal.id)
+            {
+                return BadRequest();
+            }
 
-        //private bool UserExists(int id)
-        //{
-        //  return (_context.Users?.Any(e => e.id == id)).GetValueOrDefault();
-        //}
+            _context.Entry(goal).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GoalExists(goalId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
+
+        [HttpPut("toggle")]
+        public async Task<IActionResult> toggleConfirmed(Goal goal)
+        {
+            if (goal == null)
+            {
+                return BadRequest();
+            }
+
+            goal.isCompleted = !goal.isCompleted;
+            _context.Entry(goal).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GoalExists(goal.id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{goalId}")]
+        public async Task<IActionResult> DeleteConfirmed(int goalId)
+        {
+            try
+            {
+                var goal = await _context.Goal.FindAsync(goalId);
+                if (goal != null)
+                {
+                    _context.Goal.Remove(goal);
+                }
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private bool GoalExists(int id)
+        {
+          return (_context.Goal?.Any(e => e.id == id)).GetValueOrDefault();
+        }
     }
 }
