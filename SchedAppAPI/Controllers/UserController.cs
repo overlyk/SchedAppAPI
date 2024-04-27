@@ -44,12 +44,18 @@ namespace SchedAppAPI.Controllers
         public async Task<IActionResult> LoginUser([FromBody]User user)
         {
 
-            var dbuser = await _context.User.Where(x => x.username == user.username && x.password == user.password).FirstOrDefaultAsync();
-
+            var dbuser = await _context.User.Where(x => x.username == user.username).FirstOrDefaultAsync();
             if (dbuser != null)
             {
-                return Ok(dbuser);
-                
+                if (dbuser.password == user.password)
+                {
+                    return Ok(dbuser);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            
             }
             else
             {
@@ -79,9 +85,18 @@ namespace SchedAppAPI.Controllers
         [HttpPost("user")]
         public async Task<IActionResult> Create([FromBody]User user)
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok(user);
+            var existingUser = await _context.User.Where(x => x.username == user.username).FirstOrDefaultAsync();
+            if (existingUser == null) 
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
         //// POST: Users/Edit/5
