@@ -100,28 +100,23 @@ namespace SchedAppAPI.Controllers
         //    return Ok(activity);
         //}
 
-        //// POST: Activities/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Activities == null)
-        //    {
-        //        return Problem("Entity set 'AppDBContext.Activities'  is null.");
-        //    }
-        //    var activity = await _context.Activities.FindAsync(id);
-        //    if (activity != null)
-        //    {
-        //        _context.Activities.Remove(activity);
-        //    }
-            
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool ActivityExists(int id)
-        //{
-        //  return (_context.Activities?.Any(e => e.id == id)).GetValueOrDefault();
-        //}
+        [HttpDelete("{activityId}")]
+        public async Task<IActionResult> DeleteConfirmed(int activityId)
+        {
+            try
+            {
+                var activity = await _context.Activity.FindAsync(activityId);
+                if (activity != null)
+                {
+                    _context.Activity.Remove(activity);
+                }
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
